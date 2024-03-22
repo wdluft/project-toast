@@ -12,6 +12,10 @@ function ToastPlayground() {
   const [message, setMessage] = React.useState('');
   const [showToast, setShowToast] = React.useState(false);
 
+  function handleDismiss() {
+    setShowToast(false);
+  }
+
   return (
     <div className={styles.wrapper}>
       <header>
@@ -23,8 +27,9 @@ function ToastPlayground() {
         <Toast
           message={message}
           selectedVariant={selectedVariant}
-          setShowToast={setShowToast}
-        />
+          handleDismiss={handleDismiss}>
+          {message}{' '}
+        </Toast>
       )}
 
       <div className={styles.controlsWrapper}>
