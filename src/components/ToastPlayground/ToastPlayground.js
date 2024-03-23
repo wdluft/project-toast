@@ -3,8 +3,8 @@ import React from 'react';
 import Button from '../Button';
 
 import styles from './ToastPlayground.module.css';
-import Toast from '../Toast/Toast';
 import ToastShelf from '../ToastShelf/ToastShelf';
+import { ToastContext } from '../ToastProvider/ToastProvider';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
@@ -13,31 +13,14 @@ function ToastPlayground() {
     VARIANT_OPTIONS[0]
   );
   const [message, setMessage] = React.useState('');
-  const [toasts, setToasts] = React.useState([]);
 
-  function handleDismiss(id) {
-    // Filter out the toast
-    const updatedToasts = toasts.filter((toast) => {
-      return toast.id !== id;
-    });
-    setToasts(updatedToasts);
-  }
+  const { createToast } = React.useContext(ToastContext);
 
-  function handleNewToast(event) {
+  function handleSubmit(event) {
     event.preventDefault();
 
     // Create a new toast object
-    const newToast = {
-      message,
-      selectedVariant,
-      id: crypto.randomUUID(),
-    };
-
-    // Create a new array with current toasts plus new toast
-    const newToasts = [...toasts, newToast];
-
-    // Update state to new array with all toasts
-    setToasts(newToasts);
+    createToast(message, selectedVariant);
 
     // Reset form inputs
     setSelectedVariant(VARIANT_OPTIONS[0]);
@@ -51,9 +34,9 @@ function ToastPlayground() {
         <h1>Toast Playground</h1>
       </header>
 
-      <ToastShelf toasts={toasts} handleDismiss={handleDismiss} />
+      <ToastShelf />
 
-      <form className={styles.controlsWrapper} onSubmit={handleNewToast}>
+      <form className={styles.controlsWrapper} onSubmit={handleSubmit}>
         <div className={styles.row}>
           <label
             htmlFor='message'
