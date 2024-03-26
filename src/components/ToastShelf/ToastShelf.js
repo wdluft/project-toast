@@ -8,7 +8,12 @@ function ToastShelf() {
   const { toasts } = React.useContext(ToastContext);
 
   return (
-    <ol className={styles.wrapper}>
+    <ol
+      role="region"
+      aria-live="polite"
+      aria-label="Notification"
+      className={styles.wrapper}
+    >
       {toasts.map((toast) => {
         return (
           <li className={styles.toastWrapper} key={toast.id}>

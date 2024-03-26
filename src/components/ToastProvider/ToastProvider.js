@@ -3,9 +3,21 @@ import React from 'react';
 export const ToastContext = React.createContext();
 
 function ToastProvider({ children }) {
-  const [toasts, setToasts] = React.useState([
-    { message: 'hi', variant: 'success', id: '13kjl13j134' },
-  ]);
+  const [toasts, setToasts] = React.useState([]);
+
+  React.useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.code === 'Escape') {
+        setToasts([]);
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   function dismissToast(id) {
     // Filter out the toast
@@ -28,7 +40,9 @@ function ToastProvider({ children }) {
   }
 
   return (
-    <ToastContext.Provider value={{ toasts, dismissToast, createToast }}>
+    <ToastContext.Provider
+      value={{ toasts, dismissToast, createToast }}
+    >
       {children}
     </ToastContext.Provider>
   );
